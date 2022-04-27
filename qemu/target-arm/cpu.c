@@ -567,6 +567,7 @@ static void cortex_m3_initfn(struct uc_struct *uc, CPUState *obj, void *opaque)
     ARMCPU *cpu = ARM_CPU(uc, obj);
     set_feature(&cpu->env, ARM_FEATURE_V7);
     set_feature(&cpu->env, ARM_FEATURE_M);
+    set_feature(&cpu->env, ARM_FEATURE_VFP4);
     cpu->midr = 0x410fc231;
 }
 
