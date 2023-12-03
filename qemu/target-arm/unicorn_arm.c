@@ -63,9 +63,9 @@ int arm_reg_ptr(struct uc_struct *uc, unsigned int *regs, void ***ptrs, int coun
         unsigned int regid = regs[i];
         void **value = ptrs[i];
         if (regid >= UC_ARM_REG_R0 && regid <= UC_ARM_REG_R12)
-            *(int32_t *)value = ARM_CPU(uc, mycpu)->env.regs[regid - UC_ARM_REG_R0];
+            *(int32_t *)value = &(ARM_CPU(uc, mycpu)->env.regs[regid - UC_ARM_REG_R0]);
         else if (regid >= UC_ARM_REG_D0 && regid <= UC_ARM_REG_D31)
-            *(float64 *)value = ARM_CPU(uc, mycpu)->env.vfp.regs[regid - UC_ARM_REG_D0];
+            *(float64 *)value = &(ARM_CPU(uc, mycpu)->env.vfp.regs[regid - UC_ARM_REG_D0]);
         else {
             switch(regid) {
                 case UC_ARM_REG_XPSR:
