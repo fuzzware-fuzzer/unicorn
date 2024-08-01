@@ -602,6 +602,9 @@ UNICORN_EXPORT
 uc_err uc_hook_add(uc_engine *uc, uc_hook *hh, int type, void *callback,
         void *user_data, uint64_t begin, uint64_t end, ...);
 
+UNICORN_EXPORT
+uc_err uc_hook_move(uc_engine *uc, uc_hook hh, uint64_t begin, uint64_t end);
+
 /*
  Unregister (remove) a hook callback.
  This API removes the hook callback registered by uc_hook_add().

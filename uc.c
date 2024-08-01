@@ -1369,6 +1369,16 @@ uc_err uc_hook_add(uc_engine *uc, uc_hook *hh, int type, void *callback,
 }
 
 UNICORN_EXPORT
+uc_err uc_hook_move(uc_engine *uc, uc_hook hh, uint64_t begin, uint64_t end) {
+    struct hook *hook = (struct hook *)hh;
+
+    hook->begin = begin;
+    hook->end = end;
+
+    return UC_ERR_OK;
+}
+
+UNICORN_EXPORT
 uc_err uc_hook_del(uc_engine *uc, uc_hook hh)
 {
     int i;
