@@ -140,6 +140,7 @@ _setup_prototype(_uc, "uc_context_save", ucerr, uc_engine, uc_context)
 _setup_prototype(_uc, "uc_context_restore", ucerr, uc_engine, uc_context)
 _setup_prototype(_uc, "uc_context_size", ctypes.c_size_t, uc_engine)
 _setup_prototype(_uc, "uc_mem_regions", ucerr, uc_engine, ctypes.POINTER(ctypes.POINTER(_uc_mem_region)), ctypes.POINTER(ctypes.c_uint32))
+_setup_prototype(_uc, "uc_hook_move", ucerr, uc_engine, uc_hook_h, ctypes.c_uint64, ctypes.c_uint64)
 
 # uc_hook_add is special due to variable number of arguments
 _uc.uc_hook_add = _uc.uc_hook_add
@@ -591,6 +592,13 @@ class Uc(object):
     def hook_del(self, h):
         _h = uc_hook_h(h)
         status = _uc.uc_hook_del(self._uch, _h)
+        if status != uc.UC_ERR_OK:
+            raise UcError(status)
+        h = 0
+
+    def hook_move(self, h, start, end):
+        _h = uc_hook_h(h)
+        status = _uc.uc_hook_move(self._uch, _h, start, end)
         if status != uc.UC_ERR_OK:
             raise UcError(status)
         h = 0
