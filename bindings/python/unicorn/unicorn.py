@@ -297,6 +297,7 @@ class Uc(object):
             raise UcError(status)
         # internal mapping table to save callback & userdata
         self._callbacks = {}
+        self._cb_counts = {}
         self._ctype_cbs = {}
         self._callback_count = 0
         self._cleanup.register(self)
@@ -580,18 +581,28 @@ class Uc(object):
                     ctypes.c_uint64(begin), ctypes.c_uint64(end)
                 )
 
+        user_handle = _h2.value
+
         # save the ctype function so gc will leave it alone.
         self._ctype_cbs[self._callback_count] = cb
+        self._cb_counts[user_handle] = self._callback_count
 
         if status != uc.UC_ERR_OK:
             raise UcError(status)
 
-        return _h2.value
+        return user_handle
 
     # delete a hook
     def hook_del(self, h):
         _h = uc_hook_h(h)
         status = _uc.uc_hook_del(self._uch, _h)
+
+        # delete callback, user_data & ctype cb
+        cbno = self._cb_counts.pop(h, None)
+        if cbno is not None:
+            self._callbacks.pop(cbno, None)
+            self._ctype_cbs.pop(cbno, None)
+
         if status != uc.UC_ERR_OK:
             raise UcError(status)
         h = 0
