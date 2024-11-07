@@ -4415,6 +4415,10 @@ void HELPER(v7m_msr)(CPUARMState *env, uint32_t reg, uint32_t val)
         }
         break;
     case 20: /* CONTROL */
+        if (env->v7m.exception != 0) {
+            // ignore write to SPSEL in handler mode
+            val &= 1;
+        }
         env->v7m.control = val & 3;
         switch_v7m_sp(env, (val & 2) != 0);
         break;
